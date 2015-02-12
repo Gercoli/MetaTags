@@ -8,6 +8,18 @@ class MetaTags implements MetaTagsInterface {
     protected static $instance = null;
 
     /**
+     * The page <title>
+     * @var string
+     */
+    protected static $page_title;
+
+    /**
+     * The length where the $page_title will be truncated. 0 = never.
+     * @var int
+     */
+    protected static $page_title_length = 0;
+
+    /**
      * Singleton constructor, only accessible internally by getInstance()
      * @see getInstance()
      */
@@ -38,12 +50,35 @@ class MetaTags implements MetaTagsInterface {
         return self::$instance;
     }
 
-    public static function title($page_title)
+    /**
+     * Sets or gets the title of the page, set returns an instance of this class.
+     * @param   string  $page_title The title of the page.
+     * @param   int     $max_length Truncate input at this number of letters.
+     * @return MetaTags|string
+     */
+    public static function title($page_title = null, $max_length = 55)
     {
-        // TODO: Implement title() method.
+        if($page_title === null)
+        {
+            return self::$page_title;
+        }
+
+        if(!is_int($max_length))
+        {
+            $max_length = strlen($page_title);
+        }
+
+        if(strlen($page_title) > $max_length && $max_length > 0)
+        {
+            $page_title = self::truncateAtWord($page_title,$max_length);
+        }
+
+        self::$page_title = $page_title;
+
+        return self::getInstance();
     }
 
-    public static function description()
+    public static function description($page_description = null, $max_length = 115)
     {
         // TODO: Implement description() method.
     }
@@ -89,7 +124,7 @@ class MetaTags implements MetaTagsInterface {
      * @param   int     $maximum_length
      * @return  string
      */
-    private function truncateAtWord($string, $maximum_length = 120)
+    public static function truncateAtWord($string, $maximum_length)
     {
         $string = trim(substr($string, 0, $maximum_length + 1),", \t\n\r\0\x0B");
         return (strlen($string) > $maximum_length) ? preg_replace('/\s+?(\S+)?$/', '', $string) : $string;
@@ -100,7 +135,7 @@ class MetaTags implements MetaTagsInterface {
      * @param   string  $string
      * @return  string
      */
-    private function removeMultipleSpaces($string)
+    public static function removeMultipleSpaces($string)
     {
         return preg_replace('/[ ]{2,}/', ' ', $string);
     }
