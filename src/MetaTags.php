@@ -21,7 +21,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * An array of page keywords.
-     * @var string[]
+     * @var string
      */
     protected static $page_keywords;
 
@@ -128,21 +128,24 @@ class MetaTags implements MetaTagsInterface {
     {
         if($keywords == null)
         {
-            return implode(", ", self::$page_keywords);
-        }
-
-        if(is_string($keywords))
-        {
-            $keywords = explode(",",$keywords);
+            return self::$page_keywords;
         }
 
         if(is_array($keywords))
         {
-            $keywords = array_map('trim', $keywords);
+            $keywords = implode(", ", array_map('trim', $keywords));
         }
-        else
+
+        if(!is_string($keywords))
         {
-            $keywords = [];
+            $keywords = "";
+        }
+
+        if(strlen($keywords) > $max_length && $max_length > 0)
+        {
+            var_dump($keywords);
+            $keywords = self::truncateAtWord($keywords,$max_length);
+            var_dump($keywords);
         }
 
         self::$last_tag = 'keywords';
@@ -189,7 +192,7 @@ class MetaTags implements MetaTagsInterface {
     public static function truncateAtWord($string, $maximum_length)
     {
         $string = trim(substr($string, 0, $maximum_length + 1),", \t\n\r\0\x0B");
-        return (strlen($string) > $maximum_length) ? preg_replace('/\s+?(\S+)?$/', '', $string) : $string;
+        return (strlen($string) > $maximum_length) ? preg_replace('/([,.!;])?\s+?(\S+)?$/', '', $string) : $string;
     }
 
     /**

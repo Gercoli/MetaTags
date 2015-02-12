@@ -28,4 +28,32 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $d = MetaTags::title($string, 25)->title();
         $this->assertTrue($d == "This is a test string", "Truncated title string failed." );
     }
+
+    public function testDescriptionMethod()
+    {
+        $original_text = "this is the website description";
+        $a = MetaTags::description($original_text,15);
+        $b = $a->description();
+
+        $this->assertTrue($b == "this is the");
+
+        $c = MetaTags::description($original_text,0)->description();
+        $this->assertTrue($c == $original_text);
+
+    }
+
+    public function testKeywordsMethod()
+    {
+        $kw_array   = array("keyword1","keyword2","keyword3");
+        $kw_string  = "keyword1, keyword2, keyword3";
+
+        $a = MetaTags::keywords($kw_array)->keywords();
+        $b = MetaTags::keywords($kw_string)->keywords();
+
+        $this->assertTrue($a == $kw_string);
+        $this->assertTrue($b == $kw_string);
+        $c = MetaTags::keywords($kw_array,20)->keywords();
+        $this->assertTrue($c == "keyword1, keyword2");
+
+    }
 }
