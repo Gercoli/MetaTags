@@ -14,10 +14,22 @@ class MetaTags implements MetaTagsInterface {
     protected static $page_title;
 
     /**
-     * The length where the $page_title will be truncated. 0 = never.
-     * @var int
+     * The page meta description.
+     * @var string
      */
-    protected static $page_title_length = 0;
+    protected static $page_description;
+
+    /**
+     * An array of page keywords.
+     * @var string[]
+     */
+    protected static $page_keywords;
+
+    /**
+     * The last tag that was accessed/modified
+     * @var string
+     */
+    protected static $last_tag;
 
     /**
      * Singleton constructor, only accessible internally by getInstance()
@@ -73,19 +85,69 @@ class MetaTags implements MetaTagsInterface {
             $page_title = self::truncateAtWord($page_title,$max_length);
         }
 
+        self::$last_tag = 'title';
         self::$page_title = $page_title;
-
         return self::getInstance();
     }
 
+    /**
+     * Set or gets the page description, set returns an instance of this class.
+     * @param   string  $page_description
+     * @param   int     $max_length
+     * @return  MetaTags|string
+     */
     public static function description($page_description = null, $max_length = 115)
     {
-        // TODO: Implement description() method.
+        if($page_description === null)
+        {
+            return self::$page_description;
+        }
+
+        if(!is_int($max_length))
+        {
+            $max_length = strlen($page_description);
+        }
+
+        if(strlen($page_description) > $max_length && $max_length > 0)
+        {
+            $page_description = self::truncateAtWord($page_description,$max_length);
+        }
+
+        self::$last_tag = 'description';
+        self::$page_description = $page_description;
+        return self::getInstance();
     }
 
-    public static function keywords()
+    /**
+     * Sets or gets the page keyword tags in the form of an array.
+     * @param   string|string[]   $keywords
+     * @param   int               $max_length
+     * @return  MetaTags|string
+     */
+    public static function keywords($keywords = null, $max_length = 150)
     {
-        // TODO: Implement keywords() method.
+        if($keywords == null)
+        {
+            return implode(", ", self::$page_keywords);
+        }
+
+        if(is_string($keywords))
+        {
+            $keywords = explode(",",$keywords);
+        }
+
+        if(is_array($keywords))
+        {
+            $keywords = array_map('trim', $keywords);
+        }
+        else
+        {
+            $keywords = [];
+        }
+
+        self::$last_tag = 'keywords';
+        self::$page_keywords = $keywords;
+        return self::getInstance();
     }
 
     public static function author()
@@ -138,5 +200,45 @@ class MetaTags implements MetaTagsInterface {
     public static function removeMultipleSpaces($string)
     {
         return preg_replace('/[ ]{2,}/', ' ', $string);
+    }
+
+    public static function renderLast()
+    {
+        // TODO: Implement renderLast() method.
+    }
+
+    public static function renderAll()
+    {
+        // TODO: Implement renderAll() method.
+    }
+
+    public static function renderTitle()
+    {
+        // TODO: Implement renderTitle() method.
+    }
+
+    public static function renderDescription()
+    {
+        // TODO: Implement renderDescription() method.
+    }
+
+    public static function renderKeywords()
+    {
+        // TODO: Implement renderKeywords() method.
+    }
+
+    public static function renderAuthor()
+    {
+        // TODO: Implement renderAuthor() method.
+    }
+
+    public static function renderCharset()
+    {
+        // TODO: Implement renderCharset() method.
+    }
+
+    public static function searchThenRender(array $search)
+    {
+        // TODO: Implement searchThenRender() method.
     }
 }
