@@ -3,8 +3,8 @@
   "description": "Wrapper for the HTMLTags class geared toward meta tags.",
   "license": "MIT",
   "require": {
-    "php": ">=5.4.0"
-    "gercoli/htmltags": "*"
+    "php": ">=5.4.0",
+    "gercoli/htmltags": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "*"
