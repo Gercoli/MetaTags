@@ -10,7 +10,6 @@ namespace GErcoli\MetaTags;
 
 
 interface MetaTagsInterface {
-    function __construct();
     public static function getInstance();
     public static function title($page_title);
     public static function description();
