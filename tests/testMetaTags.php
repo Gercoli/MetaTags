@@ -27,6 +27,11 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $string = "This is a test string that will be truncated.";
         $d = MetaTags::title($string, 25)->title();
         $this->assertTrue($d == "This is a test string", "Truncated title string failed." );
+
+        $title_tag = MetaTags::renderTitle(true);
+        $this->assertInstanceOf('GErcoli\HTMLTags\HTMLTag',$title_tag);
+        $this->assertTrue($title_tag->__toString() == sprintf("<title>%s</title>",$d));
+
     }
 
     public function testDescriptionMethod()
@@ -61,5 +66,14 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $author = "Garry Ercoli";
         $a = MetaTags::author($author)->author();
         $this->assertTrue($author == $a, "Author tag did not get set properly.");
+    }
+
+    public function testCharsetMethod()
+    {
+        $charset = "UTF-8";
+        $b = MetaTags::charset();
+        $a = MetaTags::charset($charset)->charset();
+        $this->assertTrue($charset == $a);
+        $this->assertTrue($b === null);
     }
 }

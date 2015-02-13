@@ -1,35 +1,43 @@
 <?php namespace GErcoli\MetaTags;
 
+use GErcoli\HTMLTags\HTMLTag;
+
 class MetaTags implements MetaTagsInterface {
 
     /**
-     * @var static
+     * @var static|null
      */
     protected static $instance = null;
 
     /**
      * The page <title>
-     * @var string
+     * @var string|null
      */
     protected static $page_title;
 
     /**
      * The page meta description.
-     * @var string
+     * @var string|null
      */
     protected static $page_description;
 
     /**
      * An array of page keywords.
-     * @var string
+     * @var string|null
      */
     protected static $page_keywords;
 
     /**
      * A string for the author tag
-     * @var string
+     * @var string|null
      */
     protected static $page_author;
+
+    /**
+     * A string for the page charset
+     * @var string|null
+     */
+    protected static $page_charset;
 
     /**
      * The last tag that was accessed/modified
@@ -70,9 +78,9 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Sets or gets the title of the page, set returns an instance of this class.
-     * @param   string  $page_title The title of the page.
-     * @param   int     $max_length Truncate input at this number of letters.
-     * @return MetaTags|string
+     * @param   string|null $page_title The title of the page.
+     * @param   int         $max_length Truncate input at this number of letters.
+     * @return MetaTags|string|null
      */
     public static function title($page_title = null, $max_length = 55)
     {
@@ -98,9 +106,9 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Set or gets the page description, set returns an instance of this class.
-     * @param   string  $page_description
-     * @param   int     $max_length
-     * @return  MetaTags|string
+     * @param   string|null $page_description
+     * @param   int         $max_length
+     * @return  MetaTags|string|null
      */
     public static function description($page_description = null, $max_length = 115)
     {
@@ -126,9 +134,9 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Sets or gets the page keyword tags in the form of an array.
-     * @param   string|string[]   $keywords
-     * @param   int               $max_length
-     * @return  MetaTags|string
+     * @param   string|string[]|null    $keywords
+     * @param   int                     $max_length
+     * @return  MetaTags|string|null
      */
     public static function keywords($keywords = null, $max_length = 150)
     {
@@ -144,7 +152,7 @@ class MetaTags implements MetaTagsInterface {
 
         if(!is_string($keywords))
         {
-            $keywords = "";
+            $keywords = null;
         }
 
         if(strlen($keywords) > $max_length && $max_length > 0)
@@ -160,7 +168,7 @@ class MetaTags implements MetaTagsInterface {
     /**
      * Sets or Gets the author.
      * @param   null|string $author
-     * @return  MetaTags|string
+     * @return  MetaTags|string|null
      */
     public static function author($author = null)
     {
@@ -174,9 +182,21 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
-    public static function charset($charset = "UTF-8")
+    /**
+     * Sets or Gets the charset tag value, such as "UTF-8"
+     * @param   null|string $charset
+     * @return  MetaTags|null|string
+     */
+    public static function charset($charset = null)
     {
-        // TODO: Implement charset() method.
+        if($charset == null)
+        {
+            return self::$page_charset;
+        }
+
+        self::$last_tag = 'charset';
+        self::$page_charset = $charset;
+        return self::getInstance();
     }
 
     public static function refresh($seconds = 0)
@@ -231,9 +251,29 @@ class MetaTags implements MetaTagsInterface {
         // TODO: Implement renderAll() method.
     }
 
-    public static function renderTitle()
+    /**
+     * Returns OR echos the <title> tag if it's not null.
+     * @param   bool    $return_instead
+     * @return  HTMLTag|MetaTags
+     */
+    public static function renderTitle($return_instead = false)
     {
-        // TODO: Implement renderTitle() method.
+        if(self::title() !== null && strlen(self::title()) > 0)
+        {
+            $tag = new HTMLTag("title",true);
+            $tag->appendContent(self::title());
+
+            if($return_instead === true)
+            {
+                return $tag;
+            }
+            else
+            {
+                echo $tag;
+            }
+        }
+
+        return self::getInstance();
     }
 
     public static function renderDescription()
