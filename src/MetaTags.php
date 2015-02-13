@@ -26,6 +26,12 @@ class MetaTags implements MetaTagsInterface {
     protected static $page_keywords;
 
     /**
+     * A string for the author tag
+     * @var string
+     */
+    protected static $page_author;
+
+    /**
      * The last tag that was accessed/modified
      * @var string
      */
@@ -143,9 +149,7 @@ class MetaTags implements MetaTagsInterface {
 
         if(strlen($keywords) > $max_length && $max_length > 0)
         {
-            var_dump($keywords);
             $keywords = self::truncateAtWord($keywords,$max_length);
-            var_dump($keywords);
         }
 
         self::$last_tag = 'keywords';
@@ -153,9 +157,21 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
-    public static function author()
+    /**
+     * Sets or Gets the author.
+     * @param   null|string $author
+     * @return  MetaTags|string
+     */
+    public static function author($author = null)
     {
-        // TODO: Implement author() method.
+        if($author == null)
+        {
+            return self::$page_author;
+        }
+
+        self::$last_tag = 'author';
+        self::$page_author = $author;
+        return self::getInstance();
     }
 
     public static function charset($charset = "UTF-8")

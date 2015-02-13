@@ -54,6 +54,12 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($b == $kw_string);
         $c = MetaTags::keywords($kw_array,20)->keywords();
         $this->assertTrue($c == "keyword1, keyword2");
+    }
 
+    public function testAuthorMethod()
+    {
+        $author = "Garry Ercoli";
+        $a = MetaTags::author($author)->author();
+        $this->assertTrue($author == $a, "Author tag did not get set properly.");
     }
 }
