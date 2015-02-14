@@ -40,10 +40,22 @@ class MetaTags implements MetaTagsInterface {
     protected static $page_charset;
 
     /**
+     * An array of custom meta tags.
+     * @var HTMLTag[]
+     */
+    protected static $custom_tags;
+
+    /**
      * The last tag that was accessed/modified
      * @var string
      */
     protected static $last_tag;
+
+    /**
+     * A string to output before the tag, such as a tab.
+     * @var string
+     */
+    protected static $render_prefix = "\t";
 
     /**
      * Singleton constructor, only accessible internally by getInstance()
@@ -219,26 +231,12 @@ class MetaTags implements MetaTagsInterface {
         // TODO: Implement phoneLinking() method.
     }
 
-    /**
-     * Truncate a given string at the end of the word closest (but not past) to the max length
-     * @param   string  $string
-     * @param   int     $maximum_length
-     * @return  string
-     */
-    public static function truncateAtWord($string, $maximum_length)
+    public static function customTag(HTMLTag $tag)
     {
-        $string = trim(substr($string, 0, $maximum_length + 1),", \t\n\r\0\x0B");
-        return (strlen($string) > $maximum_length) ? preg_replace('/([,.!;])?\s+?(\S+)?$/', '', $string) : $string;
-    }
-
-    /**
-     * Removes multiple consecutive spaces and replaces it with a single space.
-     * @param   string  $string
-     * @return  string
-     */
-    public static function removeMultipleSpaces($string)
-    {
-        return preg_replace('/[ ]{2,}/', ' ', $string);
+        // TODO: Implement customTag() method.
+        self::$custom_tags[] = $tag;
+        self::$last_tag = "custom-" . count(self::$custom_tags);
+        return self::getInstance();
     }
 
     public static function renderLast()
@@ -299,5 +297,43 @@ class MetaTags implements MetaTagsInterface {
     public static function searchThenRender(array $search)
     {
         // TODO: Implement searchThenRender() method.
+    }
+
+    /**
+     * Get or Set the string that gets output before a tag. Like "\t"
+     * @param   string|null $prefix
+     * @return  MetaTags|string
+     */
+    public static function renderPrefix($prefix = null)
+    {
+        if(!is_string($prefix))
+        {
+            return self::$render_prefix;
+        }
+
+        self::$render_prefix = $prefix;
+        return self::getInstance();
+    }
+
+    /**
+     * Truncate a given string at the end of the word closest (but not past) to the max length
+     * @param   string  $string
+     * @param   int     $maximum_length
+     * @return  string
+     */
+    public static function truncateAtWord($string, $maximum_length)
+    {
+        $string = trim(substr($string, 0, $maximum_length + 1),", \t\n\r\0\x0B");
+        return (strlen($string) > $maximum_length) ? preg_replace('/([,.!;])?\s+?(\S+)?$/', '', $string) : $string;
+    }
+
+    /**
+     * Removes multiple consecutive spaces and replaces it with a single space.
+     * @param   string  $string
+     * @return  string
+     */
+    public static function removeMultipleSpaces($string)
+    {
+        return preg_replace('/[ ]{2,}/', ' ', $string);
     }
 }

@@ -30,7 +30,10 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
 
         $title_tag = MetaTags::renderTitle(true);
         $this->assertInstanceOf('GErcoli\HTMLTags\HTMLTag',$title_tag);
-        $this->assertTrue($title_tag->__toString() == sprintf("<title>%s</title>",$d));
+
+        $this->assertContains("<title>",$title_tag->__toString());
+        $this->assertContains($d,$title_tag->__toString());
+        $this->assertContains("</title>",$title_tag->__toString());
 
     }
 
@@ -75,5 +78,13 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $a = MetaTags::charset($charset)->charset();
         $this->assertTrue($charset == $a);
         $this->assertTrue($b === null);
+    }
+
+    public function testCustomTagMethod()
+    {
+        $tag = new \GErcoli\HTMLTags\HTMLTag("style",true);
+        $tag->appendContent(".body {\n\tbackground: black;\n}");
+        MetaTags::customTag($tag);
+
     }
 }

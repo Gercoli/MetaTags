@@ -9,6 +9,8 @@
 namespace GErcoli\MetaTags;
 
 
+use GErcoli\HTMLTags\HTMLTag;
+
 interface MetaTagsInterface {
     public static function getInstance();
     public static function title($page_title);
@@ -20,7 +22,9 @@ interface MetaTagsInterface {
     public static function appleTouchIcon($resolution, $icon_url, $precomposed = true); // http://stackoverflow.com/questions/5110776/apple-touch-icon-for-websites
     public static function viewport($extra_options = "");  // <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
     public static function phoneLinking($enable = true);    // <meta name="format-detection" content="telephone=no" /> <meta name="x-rim-auto-match" http-equiv="x-rim-auto-match" forua="true" content="none"/>
+    public static function customTag(HTMLTag $tag);
 
+    public static function renderPrefix($prefix = null);
     public static function renderLast();
     public static function renderAll();
     public static function renderTitle();
