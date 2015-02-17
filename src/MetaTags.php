@@ -82,7 +82,7 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($page_title) && $page_title !== null)
         {
-            throw new MetaTagException('$page_title should be a string.');
+            throw new MetaTagException('Acceptable types for $page_title is string and null.');
         }
 
         self::$tags[self::setLastTag('title')->getLastTag()]
@@ -114,7 +114,7 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($page_description) & $page_description !== null)
         {
-            throw new MetaTagException('$page_description should be a string.');
+            throw new MetaTagException('Acceptable types for $page_description is string and null.');
         }
 
         self::$tags[self::setLastTag('description')->getLastTag()]
@@ -144,7 +144,7 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($page_keywords) & $page_keywords !== null)
         {
-            throw new MetaTagException('$page_keywords should be a string.');
+            throw new MetaTagException('Acceptable types for $page_keywords is string and null.');
         }
 
         self::$tags[self::setLastTag('keywords')->getLastTag()]
@@ -173,12 +173,12 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($page_author) & $page_author !== null)
         {
-            throw new MetaTagException('$page_author should be a string.');
+            throw new MetaTagException('Acceptable types for $page_author is string and null.');
         }
 
         self::$tags[self::setLastTag('author')->getLastTag()] = $page_author;
-        return self::getInstance();
 
+        return self::getInstance();
     }
 
     /**
@@ -193,7 +193,10 @@ class MetaTags implements MetaTagsInterface {
 
     public static function setCharset($charset = "UTF-8")
     {
-        // TODO: Implement setCharset() method.
+        if(!is_string($charset) & $charset !== null)
+        {
+            throw new MetaTagException('Acceptable types for $charset is string and null.');
+        }
     }
 
     public static function getCharset()
