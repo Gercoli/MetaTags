@@ -32,7 +32,7 @@ class MetaTags implements MetaTagsInterface {
         "keywords"          => null,
         "author"            => null,
         "IECompatibility"   => null,
-        "refresh"           => null,
+        "refresh"           => [],
         "viewport"          => null,
         "phoneLinking"      => null,
         "appleTouch"        => [],
@@ -219,14 +219,33 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::getLastTag()];
     }
 
+    /**
+     * Sets the meta refresh/redirect tag, $url is optional.
+     * @param   int $seconds
+     * @param   null|string $url
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setRefresh($seconds, $url = null)
     {
-        // TODO: Implement setRefresh() method.
+        if(!is_int($seconds) & $seconds !== null)
+        {
+            throw new MetaTagException('Acceptable type for $seconds is int.');
+        }
+
+        self::$tags[self::setLastTag('refresh')->getLastTag()] = array('sec' => $seconds, 'url' => $url);
+
+        return self::getInstance();
     }
 
+    /**
+     * Gets the refresh array which contains 'sec' and 'url' keys, if 'url' is null,
+     * the tag will refresh the page, if the 'url' IS NOT null, it will redirect.
+     * @return array
+     */
     public static function getRefresh()
     {
-        // TODO: Implement getRefresh() method.
+        return self::$tags[self::setLastTag('refresh')->getLastTag()];
     }
 
     public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = true)
