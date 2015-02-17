@@ -191,17 +191,32 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::getLastTag()];
     }
 
+    /**
+     * Sets the meta charset value
+     * @param   null|string $charset
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setCharset($charset = "UTF-8")
     {
         if(!is_string($charset) & $charset !== null)
         {
             throw new MetaTagException('Acceptable types for $charset is string and null.');
         }
+
+        self::$tags[self::setLastTag('charset')->getLastTag()] = $charset;
+
+        return self::getInstance();
     }
 
+    /**
+     * Get the value of the meta charset tag.
+     * @return  null|string
+     */
     public static function getCharset()
     {
-        // TODO: Implement getCharset() method.
+        self::setLastTag('charset');
+        return self::$tags[self::getLastTag()];
     }
 
     public static function setRefresh($seconds, $url = null)
