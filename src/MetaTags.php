@@ -80,13 +80,14 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function setTitle($page_title, $max_length = 55)
     {
-        if(!is_string($page_title))
+        if(!is_string($page_title) && $page_title !== null)
         {
             throw new MetaTagException('$page_title should be a string.');
         }
 
-        self::$last_tag = 'title';
-        self::$tags[self::$last_tag] = self::truncateAtWord($page_title,$max_length);
+        self::$tags[self::setLastTag('title')->getLastTag()]
+            = self::truncateAtWord($page_title,$max_length);
+
         return self::getInstance();
     }
 
@@ -96,8 +97,8 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function getTitle()
     {
-        self::$last_tag = 'title';
-        return self::$tags[self::$last_tag];
+        self::setLastTag('title');
+        return self::$tags[self::getLastTag()];
     }
 
     /**
@@ -111,13 +112,14 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function setDescription($page_description, $max_length = 155)
     {
-        if(!is_string($page_description))
+        if(!is_string($page_description) & $page_description !== null)
         {
             throw new MetaTagException('$page_description should be a string.');
         }
 
-        self::$last_tag = 'description';
-        self::$tags[self::$last_tag] = self::truncateAtWord($page_description,$max_length);
+        self::$tags[self::setLastTag('description')->getLastTag()]
+            = self::truncateAtWord(self::removeMultipleSpaces($page_description),$max_length);
+
         return self::getInstance();
     }
 
@@ -127,18 +129,38 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function getDescription()
     {
-        self::$last_tag = 'description';
-        return self::$tags[self::$last_tag];
+        self::setLastTag('description');
+        return self::$tags[self::getLastTag()];
     }
 
+    /**
+     * Sets the meta keywords value
+     * @param   string|null $page_keywords
+     * @param   int         $max_length
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setKeywords($page_keywords, $max_length = 150)
     {
-        // TODO: Implement setKeywords() method.
+        if(!is_string($page_keywords) & $page_keywords !== null)
+        {
+            throw new MetaTagException('$page_keywords should be a string.');
+        }
+
+        self::$tags[self::setLastTag('keywords')->getLastTag()]
+            = self::truncateAtWord(self::removeMultipleSpaces($page_keywords),$max_length);
+
+        return self::getInstance();
     }
 
+    /**
+     * Gets the value of the keywords meta tag.
+     * @return string|null
+     */
     public static function getKeywords()
     {
-        // TODO: Implement getKeywords() method.
+        self::setLastTag('keywords');
+        return self::$tags[self::getLastTag()];
     }
 
     public static function setAuthor($page_author)
@@ -221,6 +243,26 @@ class MetaTags implements MetaTagsInterface {
         // TODO: Implement getCustomTags() method.
     }
 
+    /**
+     * Sets the last tag variable, for internal use.
+     * @param   string  $name
+     * @return  MetaTags
+     */
+    protected static function setLastTag($name)
+    {
+        self::$last_tag = $name;
+        return self::getInstance();
+    }
+
+    /**
+     * Gets the last tag used, for internal use.
+     * @return string
+     */
+    protected static function getLastTag()
+    {
+        return self::$last_tag;
+    }
+
     public static function renderPrefix($prefix = null)
     {
         // TODO: Implement renderPrefix() method.
@@ -268,8 +310,8 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Truncate a given string at the end of the word closest (but not past) to the max length
-     * @param   string  $string
-     * @param   int     $maximum_length
+     * @param   string|null $string
+     * @param   int         $maximum_length
      * @return  string|null
      */
     public static function truncateAtWord($string, $maximum_length)
@@ -285,12 +327,12 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Removes multiple consecutive spaces and replaces it with a single space.
-     * @param   string  $string
-     * @return  string
+     * @param   string|null $string
+     * @return  string|null
      */
     public static function removeMultipleSpaces($string)
     {
-        return preg_replace('/[ ]{2,}/', ' ', $string);
+        return ($string !== null) ? preg_replace('/[ ]{2,}/', ' ', $string) : null;
     }
 
     /**
