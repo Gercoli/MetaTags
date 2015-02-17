@@ -70,7 +70,9 @@ class MetaTags implements MetaTagsInterface {
     }
 
     /**
-     * Set the page title to the given string value.
+     * Sets the <title> value to this value, the max_length will truncate
+     * the string at the previous word, using a length of 0 will disable truncation,
+     * and setting the title to null will disable the tag from being output.
      * @param   string  $page_title
      * @param   int     $max_length
      * @return  MetaTags
@@ -98,14 +100,35 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::$last_tag];
     }
 
+    /**
+     * Sets the meta description value to this value, the max_length will truncate
+     * the string at the previous word, using a length of 0 will disable truncation,
+     * and setting the description to null will disable the tag from being output.
+     * @param   string  $page_description
+     * @param   int     $max_length
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setDescription($page_description, $max_length = 155)
     {
-        // TODO: Implement setDescription() method.
+        if(!is_string($page_description))
+        {
+            throw new MetaTagException('$page_description should be a string.');
+        }
+
+        self::$last_tag = 'description';
+        self::$tags[self::$last_tag] = self::truncateAtWord($page_description,$max_length);
+        return self::getInstance();
     }
 
+    /**
+     * Returns the meta description value
+     * @return string
+     */
     public static function getDescription()
     {
-        // TODO: Implement getDescription() method.
+        self::$last_tag = 'description';
+        return self::$tags[self::$last_tag];
     }
 
     public static function setKeywords($page_keywords, $max_length = 150)
