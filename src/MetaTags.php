@@ -1,6 +1,7 @@
 <?php namespace GErcoli\MetaTags;
 
 use GErcoli\HTMLTags\HTMLTag;
+use GErcoli\MetaTags\MetaTagException;
 
 class MetaTags implements MetaTagsInterface {
 
@@ -8,42 +9,6 @@ class MetaTags implements MetaTagsInterface {
      * @var static|null
      */
     protected static $instance = null;
-
-    /**
-     * The page <title>
-     * @var string|null
-     */
-    protected static $page_title;
-
-    /**
-     * The page meta description.
-     * @var string|null
-     */
-    protected static $page_description;
-
-    /**
-     * An array of page keywords.
-     * @var string|null
-     */
-    protected static $page_keywords;
-
-    /**
-     * A string for the author tag
-     * @var string|null
-     */
-    protected static $page_author;
-
-    /**
-     * A string for the page charset
-     * @var string|null
-     */
-    protected static $page_charset;
-
-    /**
-     * An array of custom meta tags.
-     * @var HTMLTag[]
-     */
-    protected static $custom_tags;
 
     /**
      * The last tag that was accessed/modified
@@ -56,6 +21,23 @@ class MetaTags implements MetaTagsInterface {
      * @var string
      */
     protected static $render_prefix = "\t";
+
+    /**
+     * @var string[]
+     */
+    protected static $tags = [
+        "charset"           => null,
+        "title"             => null,
+        "description"       => null,
+        "keywords"          => null,
+        "author"            => null,
+        "IECompatibility"   => null,
+        "refresh"           => null,
+        "viewport"          => null,
+        "phoneLinking"      => null,
+        "appleTouch"        => [],
+        "custom"            => []
+    ];
 
     /**
      * Singleton constructor, only accessible internally by getInstance()
@@ -84,159 +66,141 @@ class MetaTags implements MetaTagsInterface {
         {
             self::$instance = new static();
         }
-
         return self::$instance;
     }
 
     /**
-     * Sets or gets the title of the page, set returns an instance of this class.
-     * @param   string|null $page_title The title of the page.
-     * @param   int         $max_length Truncate input at this number of letters.
-     * @return MetaTags|string|null
+     * Set the page title to the given string value.
+     * @param   string  $page_title
+     * @param   int     $max_length
+     * @return  MetaTags
+     * @throws  MetaTagException
      */
-    public static function title($page_title = null, $max_length = 55)
+    public static function setTitle($page_title, $max_length = 55)
     {
-        if($page_title === null)
+        if(!is_string($page_title))
         {
-            return self::$page_title;
-        }
-
-        if(!is_int($max_length))
-        {
-            $max_length = strlen($page_title);
-        }
-
-        if(strlen($page_title) > $max_length && $max_length > 0)
-        {
-            $page_title = self::truncateAtWord($page_title,$max_length);
+            throw new MetaTagException('$page_title should be a string.');
         }
 
         self::$last_tag = 'title';
-        self::$page_title = $page_title;
+        self::$tags[self::$last_tag] = self::truncateAtWord($page_title,$max_length);
         return self::getInstance();
     }
 
     /**
-     * Set or gets the page description, set returns an instance of this class.
-     * @param   string|null $page_description
-     * @param   int         $max_length
-     * @return  MetaTags|string|null
+     * Return the title that has been set for the page.
+     * @return string
      */
-    public static function description($page_description = null, $max_length = 115)
+    public static function getTitle()
     {
-        if($page_description === null)
-        {
-            return self::$page_description;
-        }
-
-        if(!is_int($max_length))
-        {
-            $max_length = strlen($page_description);
-        }
-
-        if(strlen($page_description) > $max_length && $max_length > 0)
-        {
-            $page_description = self::truncateAtWord($page_description,$max_length);
-        }
-
-        self::$last_tag = 'description';
-        self::$page_description = $page_description;
-        return self::getInstance();
+        self::$last_tag = 'title';
+        return self::$tags[self::$last_tag];
     }
 
-    /**
-     * Sets or gets the page keyword tags in the form of an array.
-     * @param   string|string[]|null    $keywords
-     * @param   int                     $max_length
-     * @return  MetaTags|string|null
-     */
-    public static function keywords($keywords = null, $max_length = 150)
+    public static function setDescription($page_description, $max_length = 155)
     {
-        if($keywords == null)
-        {
-            return self::$page_keywords;
-        }
-
-        if(is_array($keywords))
-        {
-            $keywords = implode(", ", array_map('trim', $keywords));
-        }
-
-        if(!is_string($keywords))
-        {
-            $keywords = null;
-        }
-
-        if(strlen($keywords) > $max_length && $max_length > 0)
-        {
-            $keywords = self::truncateAtWord($keywords,$max_length);
-        }
-
-        self::$last_tag = 'keywords';
-        self::$page_keywords = $keywords;
-        return self::getInstance();
+        // TODO: Implement setDescription() method.
     }
 
-    /**
-     * Sets or Gets the author.
-     * @param   null|string $author
-     * @return  MetaTags|string|null
-     */
-    public static function author($author = null)
+    public static function getDescription()
     {
-        if($author == null)
-        {
-            return self::$page_author;
-        }
-
-        self::$last_tag = 'author';
-        self::$page_author = $author;
-        return self::getInstance();
+        // TODO: Implement getDescription() method.
     }
 
-    /**
-     * Sets or Gets the charset tag value, such as "UTF-8"
-     * @param   null|string $charset
-     * @return  MetaTags|null|string
-     */
-    public static function charset($charset = null)
+    public static function setKeywords($page_keywords, $max_length = 150)
     {
-        if($charset == null)
-        {
-            return self::$page_charset;
-        }
-
-        self::$last_tag = 'charset';
-        self::$page_charset = $charset;
-        return self::getInstance();
+        // TODO: Implement setKeywords() method.
     }
 
-    public static function refresh($seconds = 0)
+    public static function getKeywords()
     {
-        // TODO: Implement refresh() method.
+        // TODO: Implement getKeywords() method.
     }
 
-    public static function appleTouchIcon($resolution, $icon_url, $precomposed = true)
+    public static function setAuthor($page_author)
     {
-        // TODO: Implement appleTouchIcon() method.
+        // TODO: Implement setAuthor() method.
     }
 
-    public static function viewport($extra_options = "")
+    public static function getAuthor()
     {
-        // TODO: Implement viewport() method.
+        // TODO: Implement getAuthor() method.
     }
 
-    public static function phoneLinking($enable = true)
+    public static function setCharset($charset = "UTF-8")
     {
-        // TODO: Implement phoneLinking() method.
+        // TODO: Implement setCharset() method.
     }
 
-    public static function customTag(HTMLTag $tag)
+    public static function getCharset()
     {
-        // TODO: Implement customTag() method.
-        self::$custom_tags[] = $tag;
-        self::$last_tag = "custom-" . count(self::$custom_tags);
-        return self::getInstance();
+        // TODO: Implement getCharset() method.
+    }
+
+    public static function setRefresh($seconds, $url = null)
+    {
+        // TODO: Implement setRefresh() method.
+    }
+
+    public static function getRefresh()
+    {
+        // TODO: Implement getRefresh() method.
+    }
+
+    public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = true)
+    {
+        // TODO: Implement setAppleTouchIcon() method.
+    }
+
+    public static function getAppleTouchIcons()
+    {
+        // TODO: Implement getAppleTouchIcons() method.
+    }
+
+    public static function setViewPort($extra_options = "")
+    {
+        // TODO: Implement setViewPort() method.
+    }
+
+    public static function getViewPort()
+    {
+        // TODO: Implement getViewPort() method.
+    }
+
+    public static function setPhoneLinking($enable = true)
+    {
+        // TODO: Implement setPhoneLinking() method.
+    }
+
+    public static function getPhoneLinking()
+    {
+        // TODO: Implement getPhoneLinking() method.
+    }
+
+    public static function setIECompatibility($engine = 'Edge,chrome=1')
+    {
+        // TODO: Implement setIECompatibility() method.
+    }
+
+    public static function getIECompatibility()
+    {
+        // TODO: Implement getIECompatibility() method.
+    }
+
+    public static function setCustomTag(HTMLTag $tag)
+    {
+        // TODO: Implement setCustomTag() method.
+    }
+
+    public static function getCustomTags()
+    {
+        // TODO: Implement getCustomTags() method.
+    }
+
+    public static function renderPrefix($prefix = null)
+    {
+        // TODO: Implement renderPrefix() method.
     }
 
     public static function renderLast()
@@ -249,29 +213,9 @@ class MetaTags implements MetaTagsInterface {
         // TODO: Implement renderAll() method.
     }
 
-    /**
-     * Returns OR echos the <title> tag if it's not null.
-     * @param   bool    $return_instead
-     * @return  HTMLTag|MetaTags
-     */
-    public static function renderTitle($return_instead = false)
+    public static function renderTitle()
     {
-        if(self::title() !== null && strlen(self::title()) > 0)
-        {
-            $tag = new HTMLTag("title",true);
-            $tag->appendContent(self::title());
-
-            if($return_instead === true)
-            {
-                return $tag;
-            }
-            else
-            {
-                echo $tag;
-            }
-        }
-
-        return self::getInstance();
+        // TODO: Implement renderTitle() method.
     }
 
     public static function renderDescription()
@@ -300,30 +244,19 @@ class MetaTags implements MetaTagsInterface {
     }
 
     /**
-     * Get or Set the string that gets output before a tag. Like "\t"
-     * @param   string|null $prefix
-     * @return  MetaTags|string
-     */
-    public static function renderPrefix($prefix = null)
-    {
-        if(!is_string($prefix))
-        {
-            return self::$render_prefix;
-        }
-
-        self::$render_prefix = $prefix;
-        return self::getInstance();
-    }
-
-    /**
      * Truncate a given string at the end of the word closest (but not past) to the max length
      * @param   string  $string
      * @param   int     $maximum_length
-     * @return  string
+     * @return  string|null
      */
     public static function truncateAtWord($string, $maximum_length)
     {
-        $string = trim(substr($string, 0, $maximum_length + 1),", \t\n\r\0\x0B");
+        if($maximum_length < 1 || $string === null)
+        {
+            return $string;
+        }
+
+        $string = trim(substr($string, 0, $maximum_length + 1),",x \t\n\r\0\x0B");
         return (strlen($string) > $maximum_length) ? preg_replace('/([,.!;])?\s+?(\S+)?$/', '', $string) : $string;
     }
 
@@ -335,5 +268,20 @@ class MetaTags implements MetaTagsInterface {
     public static function removeMultipleSpaces($string)
     {
         return preg_replace('/[ ]{2,}/', ' ', $string);
+    }
+
+    /**
+     * Returns the first string in an array.
+     * @param   array   $array
+     * @return  string|null
+     */
+    public static function firstString(array $array)
+    {
+        $contents = array_filter($array,"is_string");
+        if(isset($contents[0]))
+        {
+            return $contents[0];
+        }
+        return null;
     }
 }
