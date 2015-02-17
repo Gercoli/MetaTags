@@ -248,14 +248,38 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('refresh')->getLastTag()];
     }
 
-    public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = true)
+    /**
+     * Sets the apple-touch-icon values, precomposed images are deprecated but for backwards
+     * compatibility, you are able to add them here.
+     * @param   string      $icon_url
+     * @param   null|string $resolution
+     * @param   bool        $precomposed
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
+    public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = false)
     {
-        // TODO: Implement setAppleTouchIcon() method.
+        if(!is_string($icon_url) & $icon_url !== null)
+        {
+            throw new MetaTagException('Acceptable type for $icon_url is string.');
+        }
+
+        $key = ($precomposed === true) ? 'apple-touch-icon-precomposed' : 'apple-touch-icon';
+        self::$tags['appleTouch'][$key][] = array('size' => $resolution, 'href'=>$icon_url);
+
+        $tag_name = "appleTouch;{$key};" . (count(self::$tags['appleTouch'][$key]) - 1);
+        self::setLastTag($tag_name);
+
+        return self::getInstance();
     }
 
+    /**
+     * Gets the array of apple-touch icons.
+     * @return  array()
+     */
     public static function getAppleTouchIcons()
     {
-        // TODO: Implement getAppleTouchIcons() method.
+        return self::$tags[self::setLastTag('appleTouch')->getLastTag()];
     }
 
     public static function setViewPort($extra_options = "")
