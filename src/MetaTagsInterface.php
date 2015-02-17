@@ -35,7 +35,7 @@ interface MetaTagsInterface {
     public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = true);   // http://stackoverflow.com/questions/5110776/apple-touch-icon-for-websites
     public static function getAppleTouchIcons();
 
-    public static function setViewPort($extra_options = "");    // <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+    public static function setViewPort(array $extra_options = []);    // <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
     public static function getViewPort();
 
     public static function setPhoneLinking($enable = true); // <meta name="format-detection" content="telephone=no" /> <meta name="x-rim-auto-match" http-equiv="x-rim-auto-match" forua="true" content="none"/>

@@ -33,7 +33,7 @@ class MetaTags implements MetaTagsInterface {
         "author"            => null,
         "IECompatibility"   => null,
         "refresh"           => [],
-        "viewport"          => null,
+        "viewport"          => [],
         "phoneLinking"      => null,
         "appleTouch"        => [],
         "custom"            => []
@@ -221,7 +221,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Sets the meta refresh/redirect tag, $url is optional.
-     * @param   int $seconds
+     * @param   null|int    $seconds
      * @param   null|string $url
      * @return  MetaTags
      * @throws  MetaTagException
@@ -232,6 +232,8 @@ class MetaTags implements MetaTagsInterface {
         {
             throw new MetaTagException('Acceptable type for $seconds is int.');
         }
+
+        $seconds = ($seconds === null) ? 0 : $seconds;
 
         self::$tags[self::setLastTag('refresh')->getLastTag()] = array('sec' => $seconds, 'url' => $url);
 
@@ -259,7 +261,7 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function setAppleTouchIcon($icon_url, $resolution = null, $precomposed = false)
     {
-        if(!is_string($icon_url) & $icon_url !== null)
+        if(!is_string($icon_url))
         {
             throw new MetaTagException('Acceptable type for $icon_url is string.');
         }
@@ -282,14 +284,42 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('appleTouch')->getLastTag()];
     }
 
-    public static function setViewPort($extra_options = "")
+    public static function setViewPort(array $extra_options = [])
     {
-        // TODO: Implement setViewPort() method.
+        if(!is_string($extra_options) & $extra_options !== null)
+        {
+            throw new MetaTagException('Acceptable type for $icon_url is string.');
+        }
+
+        $defaults = array(
+            'width'         => 'device-width',
+            'initial-scale' => '1',
+            'minimum-scale' => '1',
+            'user-scalable' => 'yes'
+        );
+
+        foreach($extra_options as $key => $value)
+        {
+            $key = trim(strtolower($key));
+            if(strlen($key) < 1)
+            {
+                continue;
+            }
+            $defaults[$key] = trim(strtolower($value));
+        }
+
+        self::$tags[self::setLastTag('viewport')->getLastTag()] = $defaults;
+
+        return self::getInstance();
     }
 
+    /**
+     * Returns the settings of the viewport meta tag
+     * @return null|array
+     */
     public static function getViewPort()
     {
-        // TODO: Implement getViewPort() method.
+        return self::$tags[self::setLastTag('viewport')->getLastTag()];
     }
 
     public static function setPhoneLinking($enable = true)
