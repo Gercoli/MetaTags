@@ -23,7 +23,7 @@ class MetaTags implements MetaTagsInterface {
     protected static $render_prefix = "\t";
 
     /**
-     * @var string[]
+     * @var string[]|null[]
      */
     protected static $tags = [
         "charset"           => null,
@@ -93,7 +93,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Return the title that has been set for the page.
-     * @return string
+     * @return  null|string
      */
     public static function getTitle()
     {
@@ -125,7 +125,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Returns the meta description value
-     * @return string
+     * @return  null|string
      */
     public static function getDescription()
     {
@@ -155,7 +155,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Gets the value of the keywords meta tag.
-     * @return string|null
+     * @return  null|string
      */
     public static function getKeywords()
     {
@@ -163,14 +163,32 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::getLastTag()];
     }
 
+    /**
+     * Sets the meta author value
+     * @param   string|null $page_author
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setAuthor($page_author)
     {
-        // TODO: Implement setAuthor() method.
+        if(!is_string($page_author) & $page_author !== null)
+        {
+            throw new MetaTagException('$page_author should be a string.');
+        }
+
+        self::$tags[self::setLastTag('author')->getLastTag()] = $page_author;
+        return self::getInstance();
+
     }
 
+    /**
+     * Returns the meta author tag value.
+     * @return null|string
+     */
     public static function getAuthor()
     {
-        // TODO: Implement getAuthor() method.
+        self::setLastTag('author');
+        return self::$tags[self::getLastTag()];
     }
 
     public static function setCharset($charset = "UTF-8")
