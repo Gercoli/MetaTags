@@ -460,45 +460,41 @@ class MetaTags implements MetaTagsInterface {
         return self::$render_prefix;
     }
 
-    public static function renderLast()
+    public static function renderLast($return = false)
     {
         // TODO: Implement renderLast() method.
     }
 
-    public static function renderAll()
+    public static function renderAll($return = false)
     {
         // TODO: Implement renderAll() method.
     }
 
-    public static function renderTitle()
+    public static function renderTitle($return = false)
     {
         // TODO: Implement renderTitle() method.
     }
 
-    public static function renderDescription()
+    public static function renderDescription($return = false)
     {
         // TODO: Implement renderDescription() method.
     }
 
-    public static function renderKeywords()
+    public static function renderKeywords($return = false)
     {
         // TODO: Implement renderKeywords() method.
     }
 
-    public static function renderAuthor()
+    public static function renderAuthor($return = false)
     {
         // TODO: Implement renderAuthor() method.
     }
 
-    public static function renderCharset()
+    public static function renderCharset($return = false)
     {
         // TODO: Implement renderCharset() method.
     }
 
-    public static function searchThenRender(array $search)
-    {
-        // TODO: Implement searchThenRender() method.
-    }
 
     /**
      * Truncate a given string at the end of the word closest (but not past) to the max length

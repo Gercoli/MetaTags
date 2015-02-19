@@ -49,12 +49,12 @@ interface MetaTagsInterface {
 
     public static function setRenderPrefix($prefix = null);
     public static function getRenderPrefix();
-    public static function renderLast();
-    public static function renderAll();
-    public static function renderTitle();
-    public static function renderDescription();
-    public static function renderKeywords();
-    public static function renderAuthor();
-    public static function renderCharset();
-    public static function searchThenRender(array $search);
+
+    public static function renderLast($return = false);
+    public static function renderAll($return = false);
+    public static function renderTitle($return = false);
+    public static function renderDescription($return = false);
+    public static function renderKeywords($return = false);
+    public static function renderAuthor($return = false);
+    public static function renderCharset($return = false);
 }
