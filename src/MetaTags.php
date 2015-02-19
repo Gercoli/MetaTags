@@ -695,7 +695,7 @@ class MetaTags implements MetaTagsInterface {
         $tag = null;
         if(is_string($charset))
         {
-            $tag = (new HTMLTag("meta",false,self::getEncodingXHTML()))
+            $tag = (new HTMLTag("meta", false, self::getEncodingXHTML()))
                 ->setAttribute("charset",$charset);
         }
 
@@ -710,7 +710,27 @@ class MetaTags implements MetaTagsInterface {
 
     public static function renderRefresh($return = false)
     {
+        $refresh = self::getRefresh();
+        $tag = null;
+        if( isset($refresh['sec']) && is_int($refresh['sec']) )
+        {
+            $content = $refresh['sec'];
+            if( isset($refresh['url']) && is_string($refresh['url']) )
+            {
+                $content .= "; url=" . $refresh['url'];
+            }
 
+            $tag = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+                ->setAttribute("content",$content);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
     public static function renderAppleTouchIcon($return = false)
     {
