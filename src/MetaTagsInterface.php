@@ -47,8 +47,8 @@ interface MetaTagsInterface {
     public static function addCustomTag(HTMLTag $tag);
     public static function getCustomTags();
 
-
-    public static function renderPrefix($prefix = null);
+    public static function setRenderPrefix($prefix = null);
+    public static function getRenderPrefix();
     public static function renderLast();
     public static function renderAll();
     public static function renderTitle();

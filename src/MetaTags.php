@@ -434,9 +434,30 @@ class MetaTags implements MetaTagsInterface {
         return self::$last_tag;
     }
 
-    public static function renderPrefix($prefix = null)
+    /**
+     * Sets the string that will prefix any output tag, such as a tab
+     * @param   string  $prefix - The string to prefix tags with, default is a tab.
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
+    public static function setRenderPrefix($prefix = "\t")
     {
-        // TODO: Implement renderPrefix() method.
+        if(!is_string($prefix))
+        {
+            throw new MetaTagException('Acceptable type for $prefix is string, but got ' . gettype($prefix));
+        }
+
+        self::$render_prefix = $prefix;
+        return self::getInstance();
+    }
+
+    /**
+     * Returns the string that will prefix all tags that are output.
+     * @return string
+     */
+    public static function getRenderPrefix()
+    {
+        return self::$render_prefix;
     }
 
     public static function renderLast()
