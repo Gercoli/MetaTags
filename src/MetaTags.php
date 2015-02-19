@@ -291,9 +291,9 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function setViewPort(array $extra_options = [])
     {
-        if(!is_string($extra_options) & $extra_options !== null)
+        if(!is_array($extra_options) & $extra_options !== null)
         {
-            throw new MetaTagException('Acceptable type for $icon_url is string.');
+            throw new MetaTagException('Acceptable type for $extra_options is array.');
         }
 
         $defaults = array(
