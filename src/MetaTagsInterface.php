@@ -44,7 +44,7 @@ interface MetaTagsInterface {
     public static function setIECompatibility($engine = 'Edge,chrome=1');   // http://stackoverflow.com/questions/6771258/whats-the-difference-if-meta-http-equiv-x-ua-compatible-content-ie-edge-e
     public static function getIECompatibility();
 
-    public static function setCustomTag(HTMLTag $tag);
+    public static function addCustomTag(HTMLTag $tag);
     public static function getCustomTags();
 
 

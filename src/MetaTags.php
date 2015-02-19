@@ -1,7 +1,6 @@
 <?php namespace GErcoli\MetaTags;
 
 use GErcoli\HTMLTags\HTMLTag;
-use GErcoli\MetaTags\MetaTagException;
 
 class MetaTags implements MetaTagsInterface {
 
@@ -339,7 +338,9 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_bool($enable) && $enable !== null)
         {
-            throw new MetaTagException('Acceptable types for $enable are boolean and null, but got ' . gettype($enable));
+            throw new MetaTagException(
+                'Acceptable types for $enable are boolean and null, but got ' . gettype($enable)
+            );
         }
 
         self::$tags[self::setLastTag('phoneLinking')->getLastTag()] = $enable;
@@ -367,7 +368,9 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($engine) && $engine !== null)
         {
-            throw new MetaTagException('Acceptable types for $engine are string and null, but got ' . gettype($engine));
+            throw new MetaTagException(
+                'Acceptable types for $engine are string and null, but got ' . gettype($engine)
+            );
         }
 
         self::$tags[self::setLastTag('IECompatibility')->getLastTag()] = $engine;
@@ -384,7 +387,7 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('IECompatibility')->getLastTag()];
     }
 
-    public static function setCustomTag(HTMLTag $tag)
+    public static function addCustomTag(HTMLTag $tag)
     {
         // TODO: Implement setCustomTag() method.
     }
