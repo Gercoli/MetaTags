@@ -148,6 +148,11 @@ class MetaTags implements MetaTagsInterface {
             throw new MetaTagException('Acceptable types for $page_description is string and null.');
         }
 
+        if(!is_int($max_length))
+        {
+            throw new MetaTagException('Acceptable type for $max_length is int, but was a: ' . gettype($max_length));
+        }
+
         self::$tags[self::setLastTag('description')->getLastTag()]
             = self::truncateAtWord(self::removeMultipleSpaces($page_description),$max_length);
 
@@ -176,6 +181,11 @@ class MetaTags implements MetaTagsInterface {
         if(!is_string($page_keywords) & $page_keywords !== null)
         {
             throw new MetaTagException('Acceptable types for $page_keywords is string and null.');
+        }
+
+        if(!is_int($max_length))
+        {
+            throw new MetaTagException('Acceptable type for $max_length is int, but was a: ' . gettype($max_length));
         }
 
         self::$tags[self::setLastTag('keywords')->getLastTag()]

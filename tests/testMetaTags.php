@@ -1,7 +1,102 @@
 <?php
 use GErcoli\MetaTags\MetaTags as MetaTags;
+use GErcoli\MetaTags\MetaTagException as MetaTagException;
 
 class HTMLTagTest extends PHPUnit_Framework_TestCase {
+
+    public function testCommonTagExceptions()
+    {
+        // ====================================================================================
+        // setTitle() : argument 1
+        // ====================================================================================
+        $exception_thrown = false;
+        try
+        {
+            MetaTags::setTitle(10); // giving it an INT should throw an exception.
+        }
+        catch(MetaTagException $e)
+        {
+            $exception_thrown = true;
+        }
+
+        $this->assertTrue(
+            $exception_thrown,
+            "Exception was not thrown for setTitle()."
+        );
+
+        // ====================================================================================
+        // setDescription() : argument 1
+        // ====================================================================================
+        $exception_thrown = false;
+        try
+        {
+            MetaTags::setDescription(10); // giving it an INT should throw an exception.
+        }
+        catch(MetaTagException $e)
+        {
+            $exception_thrown = true;
+        }
+
+        $this->assertTrue(
+            $exception_thrown,
+            "Exception was not thrown for setDescription() when given an INT (SHOULD BE STRING)."
+        );
+
+        // ====================================================================================
+        // setDescription() : argument 2
+        // ====================================================================================
+        $exception_thrown = false;
+        try
+        {
+            MetaTags::setDescription('hello','hello'); // Giving it a string should throw an exception.
+        }
+        catch(MetaTagException $e)
+        {
+            $exception_thrown = true;
+        }
+
+        $this->assertTrue(
+            $exception_thrown,
+            "Exception was not thrown for setDescription() when given an string (SHOULD BE INT)."
+        );
+
+        // ====================================================================================
+        // setKeywords() : argument 1
+        // ====================================================================================
+        $exception_thrown = false;
+        try
+        {
+            MetaTags::setKeywords(10); // Giving it a string should throw an exception.
+        }
+        catch(MetaTagException $e)
+        {
+            $exception_thrown = true;
+        }
+
+        $this->assertTrue(
+            $exception_thrown,
+            "Exception was not thrown for setDescription() when given an string (SHOULD BE INT)."
+        );
+
+        // ====================================================================================
+        // setKeywords() : argument 2
+        // ====================================================================================
+        $exception_thrown = false;
+        try
+        {
+            MetaTags::setKeywords("This, is, a, keyword", "hi"); // Giving it a string should throw an exception.
+        }
+        catch(MetaTagException $e)
+        {
+            $exception_thrown = true;
+        }
+
+        $this->assertTrue(
+            $exception_thrown,
+            "Exception was not thrown for setDescription() when given an string (SHOULD BE INT)."
+        );
+
+    }
 
     public function testTitle()
     {
