@@ -14,6 +14,9 @@ use GErcoli\HTMLTags\HTMLTag;
 interface MetaTagsInterface {
     public static function getInstance();
 
+    public static function setEncodingXHTML($enable);
+    public static function getEncodingXHTML();
+
     public static function setTitle($page_title, $max_length = 55);
     public static function getTitle();
 
@@ -57,4 +60,10 @@ interface MetaTagsInterface {
     public static function renderKeywords($return = false);
     public static function renderAuthor($return = false);
     public static function renderCharset($return = false);
+    public static function renderRefresh($return = false);
+    public static function renderAppleTouchIcon($return = false);
+    public static function renderViewPort($return = false);
+    public static function renderPhoneLinking($return = false);
+    public static function renderIECompatibility($return = false);
+    public static function renderCustom($return = false);
 }

@@ -39,6 +39,12 @@ class MetaTags implements MetaTagsInterface {
     ];
 
     /**
+     * Are we outputing tags in XHTML?
+     * @var bool
+     */
+    protected static $encode_XHTML = false;
+
+    /**
      * Singleton constructor, only accessible internally by getInstance()
      * @see getInstance()
      */
@@ -69,6 +75,32 @@ class MetaTags implements MetaTagsInterface {
     }
 
     /**
+     * Are we outputting tags in XHTML with self-closing tags?
+     * @param   bool    $enable
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
+    public static function setEncodingXHTML($enable)
+    {
+        if(!is_bool($enable))
+        {
+            throw new MetaTagException('Acceptable type for $enable is bool.');
+        }
+
+        self::$encode_XHTML = $enable;
+        return self::getInstance();
+    }
+
+    /**
+     * The XHTML setting.
+     * @return  bool
+     */
+    public static function getEncodingXHTML()
+    {
+        return self::$encode_XHTML;
+    }
+
+    /**
      * Sets the <title> value to this value, the max_length will truncate
      * the string at the previous word, using a length of 0 will disable truncation,
      * and setting the title to null will disable the tag from being output.
@@ -81,7 +113,7 @@ class MetaTags implements MetaTagsInterface {
     {
         if(!is_string($page_title) && $page_title !== null)
         {
-            throw new MetaTagException('Acceptable types for $page_title is string and null.');
+            throw new MetaTagException('Acceptable types for $page_title are string and null.');
         }
 
         self::$tags[self::setLastTag('title')->getLastTag()]
@@ -460,9 +492,76 @@ class MetaTags implements MetaTagsInterface {
         return self::$render_prefix;
     }
 
+    /**
+     * Renders the last tag that was accessed or modified.
+     * @param   bool $return
+     * @return  MetaTags|HTMLTag|null
+     * @throws  MetaTagException
+     */
     public static function renderLast($return = false)
     {
-        // TODO: Implement renderLast() method.
+        if( !is_string(self::getLastTag()) || !isset(self::$tags[self::getLastTag()]) )
+        {
+            throw new MetaTagException("Unable to find a valid last tag to render.");
+        }
+
+        switch(strtolower(self::getLastTag()))
+        {
+            case 'title':
+                $tag = self::renderTitle(true);
+                break;
+            case 'description':
+                $tag = self::renderDescription(true);
+                break;
+            case 'keywords':
+                $tag = self::renderKeywords(true);
+                break;
+            case 'author':
+                $tag = self::renderAuthor(true);
+                break;
+            case 'charset':
+                $tag = self::renderCharset(true);
+                break;
+            case 'refresh':
+                $tag = self::renderRefresh(true);
+                break;
+            case 'appletouch':
+                $tag = self::renderAppleTouchIcon(true);
+                break;
+            case 'viewport':
+                $tag = self::renderViewPort(true);
+                break;
+            case 'phonelinking':
+                $tag = self::renderPhoneLinking(true);
+                break;
+            case 'iecompatibility':
+                $tag = self::renderIECompatibility(true);
+                break;
+            case 'custom':
+                $tag = end(self::$tags['custom']);
+                break;
+            default:
+                $tag = null;
+                throw new MetaTagException("Unknown last tag.");
+                break;
+        }
+
+        if(!isset($tag))
+        {
+            throw new MetaTagException("Tag was not set.");
+        }
+
+        if($return)
+        {
+            if(!($tag instanceof HTMLTag))
+            {
+                return null;
+            }
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
     public static function renderAll($return = false)
@@ -493,6 +592,31 @@ class MetaTags implements MetaTagsInterface {
     public static function renderCharset($return = false)
     {
         // TODO: Implement renderCharset() method.
+    }
+
+    public static function renderRefresh($return = false)
+    {
+
+    }
+    public static function renderAppleTouchIcon($return = false)
+    {
+
+    }
+    public static function renderViewPort($return = false)
+    {
+
+    }
+    public static function renderPhoneLinking($return = false)
+    {
+
+    }
+    public static function renderIECompatibility($return = false)
+    {
+
+    }
+    public static function renderCustom($return = false)
+    {
+
     }
 
 
