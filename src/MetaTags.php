@@ -738,9 +738,39 @@ class MetaTags implements MetaTagsInterface {
         echo $tag;
         return self::getInstance();
     }
+
+    /**
+     * Renders the apple touch icons (all of them)
+     * @param   bool    $return
+     * @return  array|MetaTags
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderAppleTouchIcon($return = false)
     {
+        $icon_array = self::getAppleTouchIcons();
+        $tag_array = [];
+        foreach($icon_array as $rel => $icons)
+        {
+            foreach($icons as $icon)
+            {
+                $tag_array[] = (new HTMLTag("link", false, self::getEncodingXHTML()))
+                    ->setAttribute("rel",$rel)
+                    ->setAttribute("sizes",$icon["size"])
+                    ->setAttribute("href", $icon['href']);
+            }
+        }
 
+        if($return === true)
+        {
+            return $tag_array;
+        }
+
+        foreach($tag_array as $tag)
+        {
+            echo $tag;
+        }
+
+        return self::getInstance();
     }
     public static function renderViewPort($return = false)
     {
