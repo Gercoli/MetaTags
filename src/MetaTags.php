@@ -631,19 +631,81 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
+    /**
+     * Render the meta keywords tag.
+     * @param   bool    $return
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderKeywords($return = false)
     {
-        // TODO: Implement renderKeywords() method.
+        $keywords = self::getKeywords();
+        $tag = null;
+        if(is_string($keywords))
+        {
+            $tag = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+                ->setAttribute("name", "keywords")
+                ->setAttribute("content", $keywords);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
+    /**
+     * Render the meta author tag.
+     * @param bool $return
+     * @return HTMLTag|MetaTags|null
+     * @throws \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderAuthor($return = false)
     {
-        // TODO: Implement renderAuthor() method.
+        $author = self::getAuthor();
+        $tag = null;
+        if(is_string($author))
+        {
+            $tag = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+                ->setAttribute("name","author")
+                ->setAttribute("content",$author);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
+    /**
+     * Renders out the charset meta tag, if there is one set.
+     * @param   bool    $return
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderCharset($return = false)
     {
-        // TODO: Implement renderCharset() method.
+        $charset = self::getCharset();
+        $tag = null;
+        if(is_string($charset))
+        {
+            $tag = (new HTMLTag("meta",false,self::getEncodingXHTML()))
+                ->setAttribute("charset",$charset);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
     public static function renderRefresh($return = false)
