@@ -708,6 +708,12 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
+    /**
+     * Renders the refresh (or redirect) meta tag.
+     * @param   bool    $return
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderRefresh($return = false)
     {
         $refresh = self::getRefresh();
