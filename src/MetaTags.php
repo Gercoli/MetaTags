@@ -284,6 +284,12 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('appleTouch')->getLastTag()];
     }
 
+    /**
+     * Sets the viewport meta tag value for mobile devices.
+     * @param   array   $extra_options  - These options will overwrite default values.
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setViewPort(array $extra_options = [])
     {
         if(!is_string($extra_options) & $extra_options !== null)
