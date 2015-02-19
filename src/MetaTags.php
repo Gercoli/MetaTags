@@ -569,9 +569,30 @@ class MetaTags implements MetaTagsInterface {
         // TODO: Implement renderAll() method.
     }
 
+    /**
+     * Render the title tag, if one is set.
+     * @param   bool $return
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderTitle($return = false)
     {
-        // TODO: Implement renderTitle() method.
+        $title = self::getTitle();
+        $tag = null;
+        if($title !== null && is_string($title))
+        {
+            $tag = (new HTMLTag("title",true,self::getEncodingXHTML()))
+                ->appendContent($title);
+        }
+
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
     public static function renderDescription($return = false)
