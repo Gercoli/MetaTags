@@ -63,4 +63,36 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
             "The renderTitle() DID NOT return null!"
         );
     }
+
+    public function testDescription()
+    {
+        // Set up the original text with some quotes in it to test escaping.
+        $description_original = "This is the original \"description\".";
+        $description_received =
+            MetaTags::setDescription($description_original,0)
+                ->getDescription();
+
+        // Make sure what we got back is what we put in. (not truncated)
+        $this->assertEquals(
+            $description_original,
+            $description_received,"The original description was not a match"
+        );
+
+        // Do the same test, but with truncation turned on.
+        $description_received =
+            MetaTags::setDescription($description_original,10)
+                ->getDescription();
+
+        // Test to make sure truncation is working.
+        $this->assertEquals(
+            $description_received,
+            MetaTags::truncateAtWord($description_original,10)
+        );
+
+        $tag_text = MetaTags::renderDescription(true)->__toString();
+        $this->assertStringStartsWith("<meta ",$tag_text);
+        $this->assertStringEndsWith(">",$tag_text);
+
+
+    }
 }

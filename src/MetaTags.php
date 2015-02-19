@@ -571,7 +571,7 @@ class MetaTags implements MetaTagsInterface {
 
     /**
      * Render the title tag, if one is set.
-     * @param   bool $return
+     * @param   bool    $return - If true, the tag is returned INSTEAD of echo'd
      * @return  HTMLTag|MetaTags|null
      * @throws  \GErcoli\HTMLTags\HTMLTagException
      */
@@ -581,7 +581,7 @@ class MetaTags implements MetaTagsInterface {
         $tag = null;
         if($title !== null && is_string($title))
         {
-            $tag = (new HTMLTag("title",true,self::getEncodingXHTML()))
+            $tag = (new HTMLTag("title", true, self::getEncodingXHTML()))
                 ->appendContent($title);
         }
 
@@ -595,9 +595,30 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
+    /**
+     * Render the meta description tag, if one is set.
+     * @param   bool    $return - If true, the tag is returned INSTEAD of echo'd
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderDescription($return = false)
     {
-        // TODO: Implement renderDescription() method.
+        $description = self::getDescription();
+        $tag = null;
+        if(is_string($description))
+        {
+           $tag = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+               ->setAttribute("name","description")
+               ->setAttribute("content",$description);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
 
     public static function renderKeywords($return = false)
