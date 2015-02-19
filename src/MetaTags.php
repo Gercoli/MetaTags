@@ -349,14 +349,33 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('phoneLinking')->getLastTag()];
     }
 
+
+    /**
+     * Sets the Internet Explorer compatibility string that will be used,
+     * more info: http://stackoverflow.com/questions/6771258
+     * @param   null|string $engine - The string that will be used, null disables the tag.
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setIECompatibility($engine = 'Edge,chrome=1')
     {
-        // TODO: Implement setIECompatibility() method.
+        if(!is_string($engine) && $engine !== null)
+        {
+            throw new MetaTagException('Acceptable types for $engine are string and null, but got ' . gettype($engine));
+        }
+
+        self::$tags[self::setLastTag('IECompatibility')->getLastTag()] = $engine;
+        return self::getInstance();
     }
 
+    /**
+     * Returns the string that will be used in the Internet Explorer compatibility tag,
+     * see: http://stackoverflow.com/questions/6771258
+     * @return  null|string
+     */
     public static function getIECompatibility()
     {
-        // TODO: Implement getIECompatibility() method.
+        return self::$tags[self::setLastTag('IECompatibility')->getLastTag()];
     }
 
     public static function setCustomTag(HTMLTag $tag)
