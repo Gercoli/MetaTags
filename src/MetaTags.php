@@ -322,14 +322,31 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('viewport')->getLastTag()];
     }
 
+    /**
+     * Enables/Disables the tag that tells mobile devices if they should parse out
+     * phone numbers into clickable links.
+     * @param   null|bool   $enable
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function setPhoneLinking($enable = true)
     {
-        // TODO: Implement setPhoneLinking() method.
+        if(!is_bool($enable) && $enable !== null)
+        {
+            throw new MetaTagException('Acceptable types for $enable are boolean and null, but got ' . gettype($enable));
+        }
+
+        self::$tags[self::setLastTag('phoneLinking')->getLastTag()] = $enable;
+        return self::getInstance();
     }
 
+    /**
+     * Will mobile devices be told to parse phone numbers as links?
+     * @return  null|bool
+     */
     public static function getPhoneLinking()
     {
-        // TODO: Implement getPhoneLinking() method.
+        return self::$tags[self::setLastTag('phoneLinking')->getLastTag()];
     }
 
     public static function setIECompatibility($engine = 'Edge,chrome=1')
