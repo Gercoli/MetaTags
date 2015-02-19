@@ -387,14 +387,31 @@ class MetaTags implements MetaTagsInterface {
         return self::$tags[self::setLastTag('IECompatibility')->getLastTag()];
     }
 
+    /**
+     * Adds a custom HTMLTag to the list of tags that will be rendered.
+     * @param   HTMLTag $tag
+     * @return  MetaTags
+     * @throws  MetaTagException
+     */
     public static function addCustomTag(HTMLTag $tag)
     {
-        // TODO: Implement setCustomTag() method.
+        if(!($tag instanceof HTMLTag))
+        {
+            throw new MetaTagException('Acceptable type for $tag is HTMLTag, but got ' . gettype($tag));
+        }
+
+        self::$tags[self::setLastTag('custom')->getLastTag()][] = $tag;
+        return self::getInstance();
     }
 
+    /**
+     * Gets an array of the custom tags that will be rendered,
+     * an empty array means that none will be output.
+     * @return  HTMLTag[]
+     */
     public static function getCustomTags()
     {
-        // TODO: Implement getCustomTags() method.
+        return self::$tags[self::setLastTag('custom')->getLastTag()];
     }
 
     /**
