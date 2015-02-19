@@ -772,9 +772,37 @@ class MetaTags implements MetaTagsInterface {
 
         return self::getInstance();
     }
+
+    /**
+     * Renders the viewport meta tag.
+     * @param bool $return
+     * @return HTMLTag|MetaTags|null
+     * @throws \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderViewPort($return = false)
     {
+        $vp = self::getViewPort();
+        if(is_array($vp) && count($vp) > 0)
+        {
+            $content = $tag = null;
+            foreach($vp as $key => $value)
+            {
+                $content .= (strlen($content)>0) ? ', ' : '';
+                $content .= sprintf("%s=%s",htmlentities($key),htmlentities($value));
+            }
 
+            $tag = (new HTMLTag("meta"))
+                ->setAttribute("name","viewport")
+                ->setAttribute("content", $content);
+        }
+
+        if($return === true)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
     }
     public static function renderPhoneLinking($return = false)
     {
