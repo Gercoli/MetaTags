@@ -574,9 +574,70 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
+    /**
+     * Renders all tags that have been added to the MetaTags object.
+     * @param bool $return
+     * @return array|MetaTags
+     * @throws MetaTagException
+     * @throws \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderAll($return = false)
     {
-        // TODO: Implement renderAll() method.
+        $tags[] = self::renderCharset(true);
+        $tags[] = self::renderViewPort(true);
+        $tags[] = self::renderIECompatibility(true);
+        $tags[] = self::renderTitle(true);
+        $tags[] = self::renderDescription(true);
+        $tags[] = self::renderKeywords(true);
+        $tags[] = self::renderAuthor(true);
+        $tags[] = self::renderRefresh(true);
+        $tags[] = self::renderPhoneLinking(true);
+        $tags[] = self::renderAppleTouchIcon(true);
+        $tags[] = self::renderCustom(true);
+
+        $tag_list = [];
+        foreach($tags as $tag)
+        {
+
+            if(is_array($tag))
+            {
+                foreach($tag as $innerTag)
+                {
+                    if(!($innerTag instanceof HTMLTag))
+                    {
+                        throw new MetaTagException("Ran into non-tag where a tag was expected.");
+                    }
+                    $tag_list[] = $innerTag;
+                }
+            }
+            elseif($tag instanceof HTMLTag)
+            {
+                $tag_list[] = $tag;
+            }
+            elseif($tag === null)
+            {
+                // ignore it.
+            }
+            else
+            {
+                throw new MetaTagException("Ran into non-tag where a tag was expected. " . gettype($tag));
+            }
+        }
+
+        if($return === true)
+        {
+            return $tag_list;
+        }
+
+        foreach($tag_list as $tag)
+        {
+            if($tag instanceof HTMLTag) {
+                echo $tag->render(1) . "\n";
+            }
+        }
+
+        return self::getInstance();
+
     }
 
     /**

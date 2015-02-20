@@ -187,7 +187,14 @@ class HTMLTagTest extends PHPUnit_Framework_TestCase {
         $tag_text = MetaTags::renderDescription(true)->__toString();
         $this->assertStringStartsWith("<meta ",$tag_text);
         $this->assertStringEndsWith(">",$tag_text);
+    }
 
+    public function testRenderAll()
+    {
+        $tags = MetaTags::setTitle("This here is a title.")
+            ->setAuthor("Garry Ercoli")
+            ->setCharset("UTF-8")
+            ->renderAll(false);
 
     }
 }
