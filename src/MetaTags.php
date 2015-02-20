@@ -806,6 +806,13 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
     }
 
+    /**
+     * Renders the meta tags that will enable/disable mobile devices from auto-parsing phone numbers
+     * as clickable links.
+     * @param   bool    $return
+     * @return  array|MetaTags[]
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderPhoneLinking($return = false)
     {
         $links = self::getPhoneLinking();
@@ -840,6 +847,12 @@ class MetaTags implements MetaTagsInterface {
 
     }
 
+    /**
+     * Renders the meta tag that will tell Internet Explorer what engine to use when rendering the page.
+     * @param   bool $return
+     * @return  HTMLTag|MetaTags|null
+     * @throws  \GErcoli\HTMLTags\HTMLTagException
+     */
     public static function renderIECompatibility($return = false)
     {
         $ie_engine = self::getIECompatibility();
