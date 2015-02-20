@@ -781,10 +781,11 @@ class MetaTags implements MetaTagsInterface {
      */
     public static function renderViewPort($return = false)
     {
-        $vp = self::getViewPort();
+        $vp         = self::getViewPort();
+        $tag        = null;
+        $content    = null;
         if(is_array($vp) && count($vp) > 0)
         {
-            $content = $tag = null;
             foreach($vp as $key => $value)
             {
                 $content .= (strlen($content)>0) ? ', ' : '';
