@@ -873,9 +873,31 @@ class MetaTags implements MetaTagsInterface {
         return self::getInstance();
 
     }
+
+    /**
+     * Render all custom tags that have been added.
+     * @param   bool    $return
+     * @return  \GErcoli\HTMLTags\HTMLTag[]|MetaTags
+     */
     public static function renderCustom($return = false)
     {
+        $custom_tags = self::getCustomTags();
 
+        if($return === true)
+        {
+            return $custom_tags;
+        }
+
+        foreach($custom_tags as $tag)
+        {
+            if(!($tag instanceof HTMLTag))
+            {
+                break;
+            }
+            echo $tag;
+        }
+
+        return self::getInstance();
     }
 
 
