@@ -5,6 +5,4 @@ An easy to use wrapper for the GErcoli\HTMLTags class geared toward meta tags.
 Empty for now.
 
 ### ToDo ###
-- Start Development.
-- Implement phpunit tests.
-- Rule the world with my awesomeness.
+- Create unit tests for render methods.
