@@ -805,10 +805,41 @@ class MetaTags implements MetaTagsInterface {
         echo $tag;
         return self::getInstance();
     }
+
     public static function renderPhoneLinking($return = false)
     {
+        $links = self::getPhoneLinking();
+        $tags = [];
+        if($links === true || $links === false)
+        {
+            // iPhone and Android:
+            $tags[] = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+                ->setAttribute("name", "format-detection")
+                ->setAttribute("content", "telephone=" . ($links) ? 'yes' : 'no');
+
+            // Blackberries:
+            // There is only a disable tag, so only output the tag if it is turned off!
+            if(!$links) {
+                $tags[] = (new HTMLTag("meta", false, self::getEncodingXHTML()))
+                    ->setAttribute("http-equiv", "x-rim-auto-match")
+                    ->setAttribute("content", 'none');
+            }
+        }
+
+        if($return)
+        {
+            return $tags;
+        }
+
+        foreach($tags as $tag)
+        {
+            echo $tag . "\n";
+        }
+
+        return self::getInstance();
 
     }
+
     public static function renderIECompatibility($return = false)
     {
 
