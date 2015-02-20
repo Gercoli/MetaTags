@@ -842,6 +842,22 @@ class MetaTags implements MetaTagsInterface {
 
     public static function renderIECompatibility($return = false)
     {
+        $ie_engine = self::getIECompatibility();
+        $tag = null;
+        if(is_string($ie_engine) && strlen($ie_engine) > 0)
+        {
+            $tag = (new HTMLTag('meta', false, self::getEncodingXHTML()))
+                ->setAttribute("http-equiv","X-UA-Compatible")
+                ->setAttribute("content", "IE=" . $ie_engine);
+        }
+
+        if($return)
+        {
+            return $tag;
+        }
+
+        echo $tag;
+        return self::getInstance();
 
     }
     public static function renderCustom($return = false)
